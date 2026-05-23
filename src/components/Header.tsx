@@ -24,7 +24,7 @@ export default function Header({ onAddClick, onExportClick, onResetClick, lucroR
           </div>
           <div>
             <h1 className="text-xl font-bold text-slate-100 tracking-tight" id="header-app-title">
-              Gestão de <span className="text-indigo-400">Casinhas</span>
+              Gestão de <span className="text-indigo-400">Revendas</span>
             </h1>
             <p className="text-xs text-slate-400 mt-0.5 font-medium">
               Controle de Slots, Faturamentos, Custos e Lucro Líquido Realizado
