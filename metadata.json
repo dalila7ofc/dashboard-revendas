@@ -1,0 +1,6 @@
+{
+  "name": "Dashboard Revendas",
+  "description": "Painel completo para gestão de revendedores, controle de slots (casinhas), custos, faturamentos, lucros e cobranças.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

@@ -1,0 +1,64 @@
+{
+  "entities": {
+    "Revenda": {
+      "title": "Revenda",
+      "description": "Entidade que representa um cadastro de revendedor com suas casinhas e dados de faturamento e custo",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "ID exclusivo da revenda (e.g. timestamp ou ID do documento)"
+        },
+        "nomeRevendedor": {
+          "type": "string",
+          "description": "Nome do comprador ou revendedor"
+        },
+        "dataVencimento": {
+          "type": "string",
+          "description": "Data de vencimento da cobrança no formato YYYY-MM-DD"
+        },
+        "quantidadeCasinhas": {
+          "type": "integer",
+          "description": "Quantidade de Slots / Casinhas alocadas"
+        },
+        "precoVendaUnitario": {
+          "type": "number",
+          "description": "Preço de venda cobrado por unidade"
+        },
+        "meuCustoUnitario": {
+          "type": "number",
+          "description": "Custo por casinha pago pelo administrador"
+        },
+        "valorPago": {
+          "type": "number",
+          "description": "Quantia que já foi paga pelo revendedor"
+        },
+        "userId": {
+          "type": "string",
+          "description": "UID do usuário logado proprietário deste registro"
+        },
+        "tipoPlano": {
+          "type": "string",
+          "enum": ["normal", "mensalista", "ilimitado"],
+          "description": "Tipo de cobrança (normal por casinhas, ou valor fixo mensalista/ilimitado)"
+        }
+      },
+      "required": [
+        "nomeRevendedor",
+        "dataVencimento",
+        "quantidadeCasinhas",
+        "precoVendaUnitario",
+        "meuCustoUnitario",
+        "valorPago",
+        "userId",
+        "tipoPlano"
+      ]
+    }
+  },
+  "firestore": {
+    "revendas/{revendaId}": {
+      "schema": "Revenda",
+      "description": "Coleção global de revendas cadastradas no sistema"
+    }
+  }
+}

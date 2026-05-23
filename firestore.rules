@@ -1,0 +1,53 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Global Safety Net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Validation helper for ID shapes and length
+    function isValidId(id) {
+      return id is string && id.size() >= 1 && id.size() <= 128;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isNumeric(val) {
+      return val is int || val is float;
+    }
+
+    // Schema Validation for Revenda entity
+    function isValidRevenda(data) {
+      return data.keys().hasAll(['nomeRevendedor', 'dataVencimento', 'quantidadeCasinhas', 'precoVendaUnitario', 'meuCustoUnitario', 'valorPago', 'userId', 'tipoPlano'])
+        && data.keys().size() >= 8 && data.keys().size() <= 12
+        && data.nomeRevendedor is string 
+        && data.nomeRevendedor.size() >= 1 
+        && data.nomeRevendedor.size() <= 200
+        && data.dataVencimento is string 
+        && isNumeric(data.quantidadeCasinhas)
+        && data.quantidadeCasinhas >= 0
+        && isNumeric(data.precoVendaUnitario)
+        && data.precoVendaUnitario >= 0.0
+        && isNumeric(data.meuCustoUnitario)
+        && data.meuCustoUnitario >= 0.0
+        && isNumeric(data.valorPago)
+        && data.valorPago >= 0.0
+        && data.userId is string
+        && data.userId == request.auth.uid
+        && data.tipoPlano is string
+        && (data.tipoPlano == 'normal' || data.tipoPlano == 'mensalista' || data.tipoPlano == 'ilimitado');
+    }
+
+    // Rules for the 'revendas' collection
+    match /revendas/{revendaId} {
+      allow read: if isSignedIn() && (resource == null || resource.data.userId == request.auth.uid);
+      allow create: if isValidId(revendaId) && isSignedIn() && isValidRevenda(request.resource.data);
+      allow update: if isValidId(revendaId) && isSignedIn() && resource.data.userId == request.auth.uid && isValidRevenda(request.resource.data);
+      allow delete: if isValidId(revendaId) && isSignedIn() && resource.data.userId == request.auth.uid;
+    }
+  }
+}
